@@ -72,6 +72,7 @@ int main()
 
 	size_t index = 0;
 	int sum1 = 0;
+	int sum2 = 0;
 	char buffer[256];
 
 	while (fgets(buffer, sizeof(buffer), file))
@@ -82,10 +83,13 @@ int main()
 		{
 			sum1 += index;
 		}
+
+		sum2 += game.red * game.green * game.blue;
 	}
 
 	fclose(file);
 
 	printf("[01] sum: %i\n", sum1);
+	printf("[02] sum: %i\n", sum2);
 	return 0;
 }
