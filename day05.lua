@@ -8,11 +8,11 @@
 ---@field source_start number
 ---@field length number
 
+---@param maps Map[]
 ---@param source_category string
 ---@return Map
 function find_map(maps, source_category)
     for i = 1, #maps do
-        ---@type Map
         local map = maps[i]
         if map.source_category == source_category then
             return map
@@ -27,10 +27,26 @@ function find_range(map, value)
     for i = 1, #map.ranges do
         ---@type Range
         local range = map.ranges[i]
-        if range.source_start < value and range.source_start + range.length > value then
+        if range.source_start <= value and range.source_start + range.length > value then
             return range
         end
     end
+end
+
+---@param seed number
+---@param maps Map[]
+function get_location(seed, maps)
+    local current = "seed"
+    local value = seed
+    while current ~= "location" do
+        local map = find_map(maps, current)
+        local range = find_range(map, value)
+        if range then
+            value = range.destination_start + (value - range.source_start)
+        end
+        current = map.destination_category
+    end
+    return value
 end
 
 local seeds = {}
@@ -69,20 +85,18 @@ end
 
 table.insert(maps, current_map)
 
-local min = math.maxinteger
+local min1 = math.maxinteger
+local min2 = math.maxinteger
 
 for _, seed in ipairs(seeds) do
-    local current = "seed"
-    local value = seed
-    while current ~= "location" do
-        local map = find_map(maps, current)
-        local range = find_range(map, value)
-        if range then
-            value = range.destination_start + (value - range.source_start)
-        end
-        current = map.destination_category
-    end
-    min = math.min(min, value)
+    min1 = math.min(min1, get_location(seed, maps))
 end
 
-print("[01] min:", min)
+for i = 1, #seeds, 2 do
+    for j = seeds[i], seeds[i + 1] + seeds[i] - 1 do
+        min2 = math.min(min2, get_location(j, maps))
+    end
+end
+
+print("[01] min:", min1)
+print("[02] min:", min2)
