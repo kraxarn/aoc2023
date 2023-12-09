@@ -1,1 +1,1 @@
-advent of code 2023, this year in c, because i hate myself
+advent of code 2023, this year in lua, to see if it would be a good fit for my game engine
