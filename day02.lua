@@ -46,6 +46,7 @@ function is_possible(game)
 end
 
 local sum1 = 0
+local sum2 = 0
 local index = 0
 
 for line in io.lines("input/day02") do
@@ -54,6 +55,8 @@ for line in io.lines("input/day02") do
 	if is_possible(game) then
 		sum1 = sum1 + index
 	end
+	sum2 = sum2 + game.red * game.green * game.blue
 end
 
 print("[01] sum:", sum1)
+print("[02] sum:", sum2)
