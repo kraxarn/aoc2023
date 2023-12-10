@@ -30,8 +30,19 @@ for line in io.lines("input/day06") do
     end
 end
 
----@type number
-local sum1
+---@type Race
+local race_sum = {
+    time = 0,
+    distance = 0,
+}
+
+for _, race in ipairs(races) do
+    race_sum.time = tonumber(race_sum.time .. race.time)
+    race_sum.distance = tonumber(race_sum.distance .. race.distance)
+end
+
+local sum1 = 1
+local sum2 = 0
 
 for _, race in ipairs(races) do
     local count = 0
@@ -41,12 +52,15 @@ for _, race in ipairs(races) do
             count = count + 1
         end
     end
+    sum1 = sum1 * count
+end
 
-    if sum1 then
-        sum1 = sum1 * count
-    else
-        sum1 = count
+for i = 0, race_sum.time do
+    local distance = simulate(race_sum.time, i)
+    if distance > race_sum.distance then
+        sum2 = sum2 + 1
     end
 end
 
 print("[01] sum:", sum1)
+print("[02] sum:", sum2)
